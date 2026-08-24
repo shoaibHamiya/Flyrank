@@ -3,7 +3,17 @@ const express = require("express");
 const app = express();
 
 app.get("/", (req, res) => {
-    res.send("Hello from Task API!");
+    res.json({
+        name: "Task API",
+        version: "1",
+        endpoint: ["/tasks"]
+    });
+});
+
+app.get("/health", (req, res) => {
+    res.json({
+        status: "OK"
+    });
 });
 
 app.listen(3000, () => {
