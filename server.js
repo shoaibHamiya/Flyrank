@@ -1,5 +1,8 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const openapi = require("./openapi.json");
 const app = express();
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapi));
 app.use(express.json());
 
 const tasks = [
