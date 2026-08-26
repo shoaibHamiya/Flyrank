@@ -1,6 +1,6 @@
 const express = require("express");
-
 const app = express();
+app.use(express.json());
 
 const tasks = [
     {
@@ -35,6 +35,23 @@ app.get("/tasks/:id", (req, res) => {
 
 app.get("/tasks", (req, res) => {
     res.json(tasks);
+});
+
+app.post("/tasks", (req, res) => {
+    if (!req.body.title) {
+        return res.status(400).json({
+            error: "Title is required"
+        });
+    }
+    const newId = tasks.length + 1;
+    const newTask = {
+        id: newId,
+        title: req.body.title,
+        done: false
+    };
+
+    tasks.push(newTask);
+    res.status(201).json(newTask);
 });
 
 app.listen(3000, () => {
