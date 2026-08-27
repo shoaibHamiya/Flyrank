@@ -330,7 +330,7 @@ DELETE FROM tasks WHERE done = 1;
 
 The SQLite database was opened and inspected using DB Browser for SQLite.
 
-![SQLite Database Screenshot](database-screenshot.png)
+![SQLite Database Screenshot](Database-Screenshot.png)
 
 ## OpenAPI Documentation
 
