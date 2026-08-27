@@ -81,38 +81,58 @@ app.post("/tasks", (req, res) => {
 
 app.put("/tasks/:id", (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find(task => task.id === id);
+
+    const task = db
+        .prepare("SELECT * FROM tasks WHERE id = ?")
+        .get(id);
+
     if (!task) {
-        return res.status(404).json({
-        error: `Task ${id} not found`
-        });
-    }
-    if (!req.body.title && req.body.done === undefined) {
-        return res.status(400).json({
-        error: "Title or done is required"
-        });
-    }
-    if (req.body.title !== undefined) {
-        task.title = req.body.title;
-    }
-
-    if (req.body.done !== undefined) {
-        task.done = req.body.done;
-    }
-    res.json(task);
-});
-
-app.delete("/tasks/:id", (req, res) => {
-    const id = Number(req.params.id);
-    const taskIndex = tasks.findIndex(task => task.id === id);
-    if (taskIndex === -1) {
         return res.status(404).json({
             error: `Task ${id} not found`
         });
     }
-    tasks.splice(taskIndex, 1);
-    res.status(204).send();
 
+    if (!req.body.title && req.body.done === undefined) {
+        return res.status(400).json({
+            error: "Title or done is required"
+        });
+    }
+
+    if (req.body.title !== undefined) {
+        db.prepare("UPDATE tasks SET title = ? WHERE id = ?")
+            .run(req.body.title, id);
+    }
+
+    if (req.body.done !== undefined) {
+        db.prepare("UPDATE tasks SET done = ? WHERE id = ?")
+            .run(req.body.done ? 1 : 0, id);
+    }
+
+    const updatedTask = db
+        .prepare("SELECT * FROM tasks WHERE id = ?")
+        .get(id);
+
+    res.json({
+        id: updatedTask.id,
+        title: updatedTask.title,
+        done: Boolean(updatedTask.done)
+    });
+});
+
+app.delete("/tasks/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const result = db
+        .prepare("DELETE FROM tasks WHERE id = ?")
+        .run(id);
+
+    if (result.changes === 0) {
+        return res.status(404).json({
+            error: `Task ${id} not found`
+        });
+    }
+
+    res.status(204).send();
 });
 
 app.listen(3000, () => {
