@@ -180,3 +180,191 @@ Task-API/
 * Express
 * Swagger UI
 * OpenAPI 3.0
+
+
+W-3 Assignment 
+# Task API — SQLite Database
+
+A simple CRUD API built with Node.js and Express. This version replaces the in-memory task list with a persistent SQLite database using `better-sqlite3`.
+
+## Features
+
+* Create tasks
+* Read all tasks
+* Read a task by ID
+* Update tasks
+* Delete tasks
+* Persistent SQLite database storage
+* Automatic database and table creation
+* Automatic insertion of example tasks when the database is empty
+* OpenAPI documentation
+
+## Technologies
+
+* Node.js
+* Express.js
+* SQLite
+* better-sqlite3
+* OpenAPI
+
+## Why SQLite?
+
+SQLite was chosen because it is lightweight, simple to use, and does not require a separate database server.
+
+The database is stored in a single local file, which makes SQLite suitable for this small Task API project while still providing real database persistence.
+
+## Database
+
+The SQLite database file is:
+
+```text
+tasks.db
+```
+
+It is automatically created in the project directory when the application starts.
+
+The database contains a `tasks` table with:
+
+| Column | Type    | Description                                 |
+| ------ | ------- | ------------------------------------------- |
+| id     | INTEGER | Primary key                                 |
+| title  | TEXT    | Task title                                  |
+| done   | INTEGER | Completion status (`0` = false, `1` = true) |
+
+The `tasks.db` file is included in `.gitignore` so each user can automatically create their own local database when running the project.
+
+## API Endpoints
+
+| Method | Endpoint     | Description       |
+| ------ | ------------ | ----------------- |
+| GET    | `/tasks`     | Get all tasks     |
+| GET    | `/tasks/:id` | Get a task by ID  |
+| POST   | `/tasks`     | Create a new task |
+| PUT    | `/tasks/:id` | Update a task     |
+| DELETE | `/tasks/:id` | Delete a task     |
+
+## How to Start
+
+Clone the repository and navigate to the project directory:
+
+```bash
+cd Task-API
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the server:
+
+```bash
+node server.js
+```
+
+The API will be available at:
+
+```text
+http://localhost:3000
+```
+
+The database will automatically be created when the application starts.
+
+## Example Request
+
+Create a task:
+
+```http
+POST /tasks
+Content-Type: application/json
+```
+
+Request body:
+
+```json
+{
+  "title": "Learn SQLite"
+}
+```
+
+Example response:
+
+```json
+{
+  "id": 4,
+  "title": "Learn SQLite",
+  "done": false
+}
+```
+
+## SQLite SQL Example
+
+One of the SQL queries executed during this assignment was:
+
+```sql
+SELECT * FROM tasks WHERE done = 1;
+```
+
+This query returns only the tasks that are marked as completed.
+
+Other SQL queries explored during the assignment included:
+
+```sql
+SELECT * FROM tasks;
+```
+
+```sql
+SELECT COUNT(*) FROM tasks;
+```
+
+```sql
+UPDATE tasks SET done = 1;
+```
+
+```sql
+DELETE FROM tasks WHERE done = 1;
+```
+
+## Database Screenshot
+
+The SQLite database was opened and inspected using DB Browser for SQLite.
+
+![SQLite Database Screenshot](database-screenshot.png)
+
+## OpenAPI Documentation
+
+The API documentation is available through the project's OpenAPI specification in:
+
+```text
+openapi.json
+```
+
+## Project Structure
+
+```text
+Task-API/
+├── .gitignore
+├── database-screenshot.png
+├── openapi.json
+├── package.json
+├── package-lock.json
+├── README.md
+├── server.js
+└── tasks.db
+```
+
+`tasks.db` is generated locally and is ignored by Git.
+
+## Assignment 2 Progress
+
+* Stage 0 — Create SQLite database ✅
+* Stage 1 — Database read endpoints ✅
+* Stage 2 — Insert into database ✅
+* Stage 3 — Update and delete with SQL ✅
+* Stage 4 — Explored SQLite ✅
+* Stage 5 — Database documentation 🔄
+
+## License
+
+This project was created as part of a backend development assignment.
